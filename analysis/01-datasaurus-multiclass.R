@@ -36,12 +36,19 @@ ggsave("output/01-dataset-facets.png", dataset_facets, width = 10, height = 6)
 
 # Despite looking very different, the datasets share nearly identical
 # summary statistics.
-datasaurus_dozen |>
+summary_table <- datasaurus_dozen |>
   group_by(dataset) |>
   summarise(
     across(c(x, y), list(mean = mean, sd = sd)),
     x_y_cor = cor(x, y)
   )
+
+summary_table
+
+summary_table |>
+  gt::gt() |>
+  gt::fmt_number(columns = -dataset, decimals = 2) |>
+  gt::gtsave("output/00-summary-table.png")
 
 # Each dataset contains the same number of points.
 datasaurus_dozen |>

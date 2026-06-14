@@ -45,10 +45,11 @@ summary_table <- datasaurus_dozen |>
 
 summary_table
 
-summary_table |>
-  gt::gt() |>
-  gt::fmt_number(columns = -dataset, decimals = 2) |>
-  gt::gtsave("output/00-summary-table.png")
+summary_table_grob <- summary_table |>
+  mutate(across(where(is.numeric), \(x) round(x, 1))) |>
+  gridExtra::tableGrob(rows = NULL)
+
+ggsave("output/00-summary-table.png", summary_table_grob, width = 8, height = 6)
 
 # Each dataset contains the same number of points.
 datasaurus_dozen |>
@@ -70,8 +71,8 @@ rf_spec <- rand_forest(trees = 1000) |>
   set_engine("ranger")
 
 dino_wf <- workflow() |>
-  add_formula(dataset ~ x + y) |>
-  add_model(rf_spec)
+  add_model(rf_spec) |>
+  add_formula(dataset ~ x + y)
 
 dino_wf
 
@@ -93,12 +94,38 @@ dino_rs
 ## Evaluate the model
 ## ---------------------------------------------------------------------------
 
-collect_metrics(dino_rs)
+metrics_table <- collect_metrics(dino_rs)
 
-dino_rs |>
+metrics_table
+
+# Summarize per-resample PPV (precision) the same way collect_metrics()
+# summarizes accuracy, roc_auc, and brier_class: mean and standard error
+# across the 25 bootstrap resamples.
+ppv_by_resample <- dino_rs |>
   collect_predictions() |>
   group_by(id) |>
   ppv(dataset, .pred_class)
+
+ppv_by_resample
+
+ppv_summary <- ppv_by_resample |>
+  ungroup() |>
+  summarise(
+    .metric = "precision",
+    .estimator = "macro",
+    mean = mean(.estimate),
+    n = n(),
+    std_err = sd(.estimate) / sqrt(n()),
+    .config = NA_character_
+  )
+
+metrics_table_combined <- bind_rows(metrics_table, ppv_summary)
+
+metrics_table_grob <- metrics_table_combined |>
+  mutate(across(where(is.numeric), \(x) round(x, 3))) |>
+  gridExtra::tableGrob(rows = NULL)
+
+ggsave("output/05-metrics-table.png", metrics_table_grob, width = 6, height = 2)
 
 # ROC curves for each of the 13 classes across resamples.
 roc_curves <- dino_rs |>
@@ -106,8 +133,8 @@ roc_curves <- dino_rs |>
   group_by(id) |>
   roc_curve(dataset, .pred_away:.pred_x_shape) |>
   ggplot(aes(1 - specificity, sensitivity, color = id)) +
-  geom_abline(lty = 2, color = "gray80", size = 1.5) +
-  geom_path(show.legend = FALSE, alpha = 0.6, size = 1.2) +
+  geom_abline(lty = 2, color = "gray80", linewidth = 1.5) +
+  geom_path(show.legend = FALSE, alpha = 0.6, linewidth = 1.2) +
   facet_wrap(~.level, ncol = 5) +
   coord_equal()
 
@@ -125,8 +152,6 @@ conf_mat_heatmap <- dino_rs |>
   conf_mat(dataset, .pred_class) |>
   autoplot(type = "heatmap") +
   scale_fill_gradient(low = "white", high = "steelblue")
-
-dino_rs
 
 conf_mat_heatmap
 

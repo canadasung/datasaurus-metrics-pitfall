@@ -1,7 +1,19 @@
 # datasaurus-metrics-pitfall
 
+### The Plots
+![Datasaurus Dozen](output/01-dataset-facets.png)
+
+### The metrics of the datasets for each plot
+![Summary Table](output/00-summary-table.png)
+
+---
+
+Different plots, same metrics, WHY?
+
+I find this discrepancy interesting that we could be tricked by the data when they have the same metrics such as mean, median, standard deviation, but the plots for the data would be dramatically different. This project aims to explore this phenomenon and understand the implications for predictive modeling. This is also a reminder to myself to be aware of similar pitfall.
+
 This is a learning project that replicates the analysis from Julia Silge's blog post
-["Multiclass predictive modeling for the Datasaurus Dozen"](https://juliasilge.com/blog/datasaurus-multiclass/). I find it interesting that we could be tricked by the data when they have the same metrics such as mean, median, standard deviation, but the plots for the data would be dramatically different. This project aims to explore this phenomenon and understand the implications for predictive modeling. This is also a reminder to myself to be aware of similar pitfall.
+["Multiclass predictive modeling for the Datasaurus Dozen"](https://juliasilge.com/blog/datasaurus-multiclass/). 
 
 ## About
 

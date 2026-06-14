@@ -151,7 +151,8 @@ conf_mat_heatmap <- dino_rs |>
   collect_predictions() |>
   conf_mat(dataset, .pred_class) |>
   autoplot(type = "heatmap") +
-  scale_fill_gradient(low = "white", high = "steelblue")
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 conf_mat_heatmap
 
@@ -163,7 +164,8 @@ conf_mat_misclassified <- dino_rs |>
   filter(.pred_class != dataset) |>
   conf_mat(dataset, .pred_class) |>
   autoplot(type = "heatmap") +
-  scale_fill_gradient(low = "white", high = "steelblue")
+  scale_fill_gradient(low = "white", high = "steelblue") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 conf_mat_misclassified
 

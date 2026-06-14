@@ -6,11 +6,9 @@
 ### The metrics of the datasets for each plot
 ![Summary Table](output/00-summary-table.png)
 
----
+**Different plots, same metrics, WHY?**
 
-Different plots, same metrics, WHY?
-
-I find this discrepancy interesting that we could be tricked by the data when they have the same metrics such as mean, median, standard deviation, but the plots for the data would be dramatically different. This project aims to explore this phenomenon and understand the implications for predictive modeling. This is also a reminder to myself to be aware of similar pitfall.
+I find this discrepancy interesting that we could be tricked by the data when they have the same metrics such as mean, median, standard deviation, but the plots for the data would be dramatically different. This project aims to explore this phenomenon and understand the implications for predictive modeling. This is also a reminder to myself how important exploratory analysis is and to be aware of similar pitfall.
 
 This is a learning project that replicates the analysis from Julia Silge's blog post
 ["Multiclass predictive modeling for the Datasaurus Dozen"](https://juliasilge.com/blog/datasaurus-multiclass/). 
@@ -50,3 +48,7 @@ Run the script(s) in `analysis/` from the project root, for example:
 ```r
 source("analysis/01-datasaurus-multiclass.R")
 ```
+
+## My Learnings
+
+I have concluded my learnings into [LEARNING.md](./LEARNING.md).

@@ -30,6 +30,8 @@ dataset_facets <- datasaurus_dozen |>
   geom_point(show.legend = FALSE) +
   facet_wrap(~dataset, ncol = 5)
 
+dataset_facets
+
 ggsave("output/01-dataset-facets.png", dataset_facets, width = 10, height = 6)
 
 # Despite looking very different, the datasets share nearly identical
@@ -102,6 +104,8 @@ roc_curves <- dino_rs |>
   facet_wrap(~.level, ncol = 5) +
   coord_equal()
 
+roc_curves
+
 ggsave("output/02-roc-curves.png", roc_curves, width = 10, height = 6)
 
 # Confusion matrix across all resamples.
@@ -112,7 +116,12 @@ dino_rs |>
 conf_mat_heatmap <- dino_rs |>
   collect_predictions() |>
   conf_mat(dataset, .pred_class) |>
-  autoplot(type = "heatmap")
+  autoplot(type = "heatmap") +
+  scale_fill_gradient(low = "white", high = "steelblue")
+
+dino_rs
+
+conf_mat_heatmap
 
 ggsave("output/03-confusion-matrix.png", conf_mat_heatmap, width = 8, height = 7)
 
@@ -121,6 +130,9 @@ conf_mat_misclassified <- dino_rs |>
   collect_predictions() |>
   filter(.pred_class != dataset) |>
   conf_mat(dataset, .pred_class) |>
-  autoplot(type = "heatmap")
+  autoplot(type = "heatmap") +
+  scale_fill_gradient(low = "white", high = "steelblue")
+
+conf_mat_misclassified
 
 ggsave("output/04-confusion-matrix-misclassified.png", conf_mat_misclassified, width = 8, height = 7)
